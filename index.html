@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danial Younas — Systems & Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:   #07080D;
+  --bg2:  #0A0C14;
+  --bg3:  #0E1020;
+  --w:    #DDE3F0;
+  --wm:   rgba(221,227,240,0.42);
+  --wd:   rgba(221,227,240,0.1);
+  --wb:   rgba(221,227,240,0.07);
+  --wbh:  rgba(221,227,240,0.15);
+  --red:  #BF2B1F;
+  --grn:  #1C9E4E;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w);font-family:'Syne',sans-serif;overflow-x:hidden}
+
+/* ─── CHROME CORNERS ─── */
+.chrome-corner{position:fixed;width:52px;height:52px;z-index:900;pointer-events:none}
+.chrome-corner::before,.chrome-corner::after{content:'';position:absolute;background:rgba(221,227,240,0.22)}
+.chrome-corner::before{width:1px;height:28px}
+.chrome-corner::after{width:28px;height:1px}
+.cc-tl{top:18px;left:18px}
+.cc-tl::before{top:0;left:0}
+.cc-tl::after{top:0;left:0}
+.cc-tr{top:18px;right:18px}
+.cc-tr::before{top:0;right:0}
+.cc-tr::after{top:0;right:0}
+.cc-bl{bottom:18px;left:18px}
+.cc-bl::before{bottom:0;left:0}
+.cc-bl::after{bottom:0;left:0}
+.cc-br{bottom:18px;right:18px}
+.cc-br::before{bottom:0;right:0}
+.cc-br::after{bottom:0;right:0}
+.chrome-plus{position:fixed;font-size:14px;color:rgba(221,227,240,0.2);pointer-events:none;z-index:901;font-family:'JetBrains Mono',monospace;line-height:1}
+.cp-tl{top:15px;left:15px}
+.cp-tr{top:15px;right:15px}
+.cp-bl{bottom:15px;left:15px}
+.cp-br{bottom:15px;right:15px}
+
+/* ─── BINARY TICKER ─── */
+.ticker-wrap{position:fixed;top:0;left:0;right:0;z-index:800;height:24px;overflow:hidden;pointer-events:none;border-bottom:1px solid var(--wb)}
+.ticker-inner{display:flex;align-items:center;height:100%;white-space:nowrap;animation:tickerScroll 28s linear infinite}
+.ticker-text{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.08em;color:rgba(221,227,240,0.16);padding-right:80px}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:24px;left:0;right:0;z-index:700;display:flex;align-items:center;justify-content:space-between;padding:0.9rem 4vw;transition:background 0.4s,border-color 0.4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(7,8,13,0.9);border-color:var(--wb);backdrop-filter:blur(16px)}
+.nav-logo{font-family:'Barlow Condensed',sans-serif;font-size:1.6rem;font-weight:900;letter-spacing:0.12em;color:var(--w);text-decoration:none;opacity:0.9}
+.nav-center{display:flex;align-items:center;gap:0.6rem}
+.nav-power{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--red);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative}
+.nav-power::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--red);opacity:0.7;animation:powerPulse 2.4s ease-in-out infinite}
+@keyframes powerPulse{0%,100%{box-shadow:0 0 0 0 rgba(191,43,31,0.4)}50%{box-shadow:0 0 0 6px rgba(191,43,31,0)}}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--wm);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--w)}
+.nav-tag{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;color:rgba(221,227,240,0.2)}
+
+/* ─── HERO PILLS ─── */
+.hero-pills{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.6rem;opacity:0;animation:fadeUp 0.7s 0.58s forwards;position:relative;z-index:2}
+.hero-pill{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;padding:0.32rem 0.8rem;border-radius:1px;border:1px solid}
+.pill-green{color:var(--grn);border-color:rgba(28,158,78,0.3);background:rgba(28,158,78,0.06)}
+.pill-white{color:var(--w);border-color:var(--wbh);background:var(--wb)}
+.pill-dim{color:var(--wm);border-color:var(--wb);background:transparent}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 4vw 5rem;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background:linear-gradient(rgba(221,227,240,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(221,227,240,0.03) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 80% 80% at 30% 50%,black,transparent);opacity:0.5}
+.hero-section-tag{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--wm);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.6s 0.2s forwards}
+.hero-bracket-num{font-family:'Barlow Condensed',sans-serif;font-size:clamp(12rem,22vw,22rem);font-weight:900;line-height:1;color:rgba(221,227,240,0.04);position:absolute;top:10%;left:2vw;pointer-events:none;letter-spacing:-0.02em;user-select:none}
+.hero-name{font-family:'Barlow Condensed',sans-serif;font-size:clamp(5rem,12vw,12rem);font-weight:900;line-height:0.88;letter-spacing:0.02em;color:var(--w);margin-bottom:0.5rem;opacity:0;animation:fadeUp 0.7s 0.35s forwards;position:relative;z-index:2}
+.hero-role{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1.5rem,3.5vw,3.2rem);font-weight:700;letter-spacing:0.1em;color:var(--wm);margin-bottom:2rem;opacity:0;animation:fadeUp 0.7s 0.5s forwards;position:relative;z-index:2}
+.hero-desc{font-size:1rem;color:var(--wm);max-width:480px;line-height:1.8;margin-bottom:2.5rem;opacity:0;animation:fadeUp 0.7s 0.72s forwards;position:relative;z-index:2}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.88s forwards;position:relative;z-index:2}
+.btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.75rem 1.75rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-radius:1px;cursor:pointer;transition:all 0.22s}
+.btn-p{background:var(--w);color:var(--bg);border:none;font-weight:600}
+.btn-p:hover{background:#fff;box-shadow:0 0 32px rgba(221,227,240,0.2)}
+.btn-g{background:transparent;color:var(--wm);border:1px solid var(--wbh)}
+.btn-g:hover{color:var(--w);border-color:var(--w)}
+.hero-stats{position:absolute;right:4vw;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2rem;opacity:0;animation:fadeIn 0.8s 1.1s forwards;z-index:2}
+.stat-num{display:block;font-family:'Barlow Condensed',sans-serif;font-size:2.8rem;font-weight:900;line-height:1;color:var(--w)}
+.stat-lbl{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--wm)}
+.hero-scroll{position:absolute;bottom:2.5rem;left:4vw;display:flex;align-items:center;gap:0.8rem;opacity:0;animation:fadeIn 0.8s 1.5s forwards}
+.hero-scroll-line{width:36px;height:1px;background:var(--wbh)}
+.hero-scroll-txt{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--wm)}
+
+/* ─── SECTION CHROME ─── */
+.section-chrome{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4vw;pointer-events:none}
+.sc-tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(221,227,240,0.25)}
+.sc-bin{font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.04em;color:rgba(221,227,240,0.1);max-width:280px;overflow:hidden;white-space:nowrap}
+
+/* ─── SECTIONS ─── */
+section{padding:6rem 4vw;position:relative}
+.s-num{font-family:'Barlow Condensed',sans-serif;font-size:clamp(8rem,14vw,14rem);font-weight:900;line-height:1;color:rgba(221,227,240,0.04);position:absolute;top:4rem;left:3vw;pointer-events:none;letter-spacing:-0.01em;user-select:none}
+.s-tag{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--wm);margin-bottom:0.8rem}
+.s-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.4rem,5vw,5rem);font-weight:900;line-height:0.9;letter-spacing:0.03em;color:var(--w);margin-bottom:1.5rem}
+
+/* ─── ARCH SECTION ─── */
+#arch{background:var(--bg2);border-top:1px solid var(--wb);border-bottom:1px solid var(--wb);overflow:hidden}
+.arch-header{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-bottom:3rem;position:relative;z-index:2}
+.arch-desc{font-size:0.95rem;color:var(--wm);line-height:1.8;margin-bottom:1.5rem}
+.arch-meta{display:flex;flex-direction:column;gap:1.5rem}
+.meta-row{display:flex;gap:3rem}
+.meta-item{display:flex;flex-direction:column;gap:0.2rem}
+.meta-k{font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(221,227,240,0.3)}
+.meta-v{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--w);font-weight:500}
+.meta-v.live{color:var(--grn)}
+
+/* ─── ISO WRAP ─── */
+.iso-wrap{position:relative;width:100%;overflow:visible;margin-bottom:3rem}
+#iso-svg{width:100%;display:block;overflow:visible}
+
+/* Layer reveal animation */
+.iso-layer{opacity:0;transform:translateX(-25px);transition:opacity 0.7s ease, transform 0.7s ease}
+.iso-label{opacity:0;transform:translateX(20px);transition:opacity 0.6s ease, transform 0.6s ease}
+.iso-spine{stroke-dasharray:2000;stroke-dashoffset:2000;transition:stroke-dashoffset 3s ease}
+#arch.revealed .iso-layer:nth-child(1){opacity:1;transform:none;transition-delay:0.1s}
+#arch.revealed .iso-layer:nth-child(2){opacity:1;transform:none;transition-delay:0.4s}
+#arch.revealed .iso-layer:nth-child(3){opacity:1;transform:none;transition-delay:0.7s}
+#arch.revealed .iso-layer:nth-child(4){opacity:1;transform:none;transition-delay:1.0s}
+#arch.revealed .iso-layer:nth-child(5){opacity:1;transform:none;transition-delay:1.3s}
+#arch.revealed .iso-label:nth-child(1){opacity:1;transform:none;transition-delay:0.3s}
+#arch.revealed .iso-label:nth-child(2){opacity:1;transform:none;transition-delay:0.6s}
+#arch.revealed .iso-label:nth-child(3){opacity:1;transform:none;transition-delay:0.9s}
+#arch.revealed .iso-label:nth-child(4){opacity:1;transform:none;transition-delay:1.2s}
+#arch.revealed .iso-label:nth-child(5){opacity:1;transform:none;transition-delay:1.5s}
+#arch.revealed .iso-spine{stroke-dashoffset:0}
+
+/* ─── IMPACT CARDS ─── */
+.impact-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative;z-index:2}
+.impact-card{background:var(--bg);border:1px solid var(--wb);padding:1.75rem;position:relative;overflow:hidden;transition:border-color 0.25s}
+.impact-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:0;background:var(--w);transition:height 0.35s}
+.impact-card:hover{border-color:var(--wbh)}
+.impact-card:hover::before{height:100%}
+.ic-label{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--wm);margin-bottom:0.75rem}
+.ic-text{font-size:0.88rem;color:var(--wm);line-height:1.75}
+.ic-text strong{color:var(--w)}
+
+/* ─── STACK ─── */
+#stack{background:var(--bg)}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0.85rem;margin-top:2.5rem}
+.stack-item{background:var(--bg2);border:1px solid var(--wb);padding:1.2rem 0.8rem;text-align:center;transition:all 0.2s;cursor:default;position:relative;overflow:hidden}
+.stack-item::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--w);transform:scaleX(0);transition:transform 0.25s;transform-origin:left}
+.stack-item:hover{border-color:var(--wbh);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.stack-item:hover::after{transform:scaleX(1)}
+.si-ico{font-size:1.1rem;margin-bottom:0.5rem;display:block;opacity:0.7}
+.si-name{font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.04em;color:var(--wm);transition:color 0.2s}
+.si-cat{font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(221,227,240,0.2);margin-top:0.2rem;transition:color 0.2s}
+.stack-item:hover .si-name{color:var(--w)}
+.stack-item:hover .si-cat{color:rgba(221,227,240,0.5)}
+
+/* ─── SERVICES ─── */
+#services{background:var(--bg2);border-top:1px solid var(--wb);border-bottom:1px solid var(--wb)}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:2.5rem}
+.svc-card{background:var(--bg);border:1px solid var(--wb);padding:2rem;transition:border-color 0.25s;position:relative;overflow:hidden}
+.svc-card:hover{border-color:var(--wbh)}
+.svc-num{font-family:'Barlow Condensed',sans-serif;font-size:3.5rem;font-weight:900;line-height:1;color:rgba(221,227,240,0.06);display:block;margin-bottom:0.8rem;transition:color 0.3s}
+.svc-card:hover .svc-num{color:rgba(221,227,240,0.12)}
+.svc-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--w);margin-bottom:0.7rem}
+.svc-desc{font-size:0.86rem;color:var(--wm);line-height:1.75;margin-bottom:1.25rem}
+.tag-row{display:flex;flex-wrap:wrap;gap:0.5rem}
+.tag{font-family:'JetBrains Mono',monospace;font-size:0.62rem;letter-spacing:0.06em;padding:0.3rem 0.65rem;background:var(--bg2);border:1px solid var(--wb);color:var(--wm)}
+.tag.hi{border-color:var(--wbh);color:var(--w)}
+
+/* ─── AVAILABILITY STRIP ─── */
+.avail-strip{background:rgba(28,158,78,0.06);border-top:1px solid rgba(28,158,78,0.2);border-bottom:1px solid rgba(28,158,78,0.2);padding:0.7rem 4vw;display:flex;align-items:center;justify-content:center;gap:0.8rem}
+.avail-dot{width:6px;height:6px;border-radius:50%;background:var(--grn);flex-shrink:0;animation:powerPulse 2s infinite}
+.avail-text{font-family:'JetBrains Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(28,158,78,0.8)}
+
+/* ─── CONTACT ─── */
+#contact{background:var(--bg);text-align:center}
+.contact-inner{max-width:560px;margin:0 auto}
+.contact-desc{font-size:1rem;color:var(--wm);line-height:1.8;margin:1.5rem 0 2.5rem}
+.contact-links{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem}
+.clink{font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--wm);text-decoration:none;border-bottom:1px solid var(--wb);padding-bottom:2px;transition:all 0.2s}
+.clink:hover{color:var(--w);border-color:var(--w)}
+
+/* ─── FOOTER ─── */
+footer{padding:1.4rem 4vw;border-top:1px solid var(--wb);display:flex;justify-content:space-between;align-items:center}
+footer span{font-family:'JetBrains Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:rgba(221,227,240,0.25)}
+.foot-dot{width:4px;height:4px;border-radius:50%;background:var(--grn);animation:powerPulse 2s infinite}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  .hero-stats{display:none}
+  .impact-row{grid-template-columns:1fr}
+  .svc-grid{grid-template-columns:1fr}
+  .arch-header{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Chrome corners -->
+<div class="chrome-corner cc-tl"></div>
+<div class="chrome-corner cc-tr"></div>
+<div class="chrome-corner cc-bl"></div>
+<div class="chrome-corner cc-br"></div>
+<span class="chrome-plus cp-tl">+</span>
+<span class="chrome-plus cp-tr">+</span>
+<span class="chrome-plus cp-bl">+</span>
+<span class="chrome-plus cp-br">+</span>
+
+<!-- Binary ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="#" class="nav-logo">DY</a>
+  <div class="nav-center">
+    <div class="nav-power" title="Systems Online"></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#arch">Infrastructure</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-bracket-num" aria-hidden>[00]</div>
+  <p class="hero-section-tag">[ SYS.ENGINEER / 00 ] &nbsp;·&nbsp; Islamabad, Pakistan &nbsp;·&nbsp; Targeting Europe</p>
+  <h1 class="hero-name">DANIAL<br>YOUNAS</h1>
+  <p class="hero-role">SYSTEMS &amp; DATA ENGINEER</p>
+  <div class="hero-pills">
+    <span class="hero-pill pill-green">● Open to Opportunities</span>
+    <span class="hero-pill pill-white">✈ Available to Relocate</span>
+    <!-- <span class="hero-pill pill-dim">DE · AT · NL · CH · Scandinavia</span> -->
+  </div>
+  <p class="hero-desc">City-scale IoT infrastructure — designed solo, running in production. I turn raw device telemetry into structured, actionable intelligence at urban scale.</p>
+  <div class="hero-actions">
+    <a href="#arch" class="btn btn-p">View Infrastructure</a>
+    <a href="#contact" class="btn btn-g">Get In Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">500+</span><span class="stat-lbl">IoT Devices</span></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-lbl">City Zones</span></div>
+    <div class="stat"><span class="stat-num">2K+</span><span class="stat-lbl">Daily Msgs</span></div>
+    <div class="stat"><span class="stat-num">5+</span><span class="stat-lbl">Protocols</span></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-txt">Featured Work</span>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="arch">
+  <div class="section-chrome">
+    <span class="sc-tag">[ Infrastructure / 01 ]</span>
+    <span class="sc-bin" id="sc-bin-01"></span>
+  </div>
+  <div class="s-num" aria-hidden>[01]</div>
+
+  <div class="arch-header" style="padding-top:3rem">
+    <div>
+      <p class="s-tag">// Featured Project</p>
+      <h2 class="s-title">CAPITAL SMART CITY<br>IOT DATA PIPELINE</h2>
+      <p class="arch-desc">A city-wide data infrastructure designed and built solo — unifying 500+ heterogeneous devices across 7 zones into a single AWS-hosted pipeline that powers the city's digital twin.</p>
+      <div class="tag-row">
+        <span class="tag hi">Go</span>
+        <span class="tag hi">MQTT</span>
+        <span class="tag hi">LoRaWAN</span>
+        <span class="tag hi">Modbus</span>
+        <span class="tag hi">AWS</span>
+        <span class="tag">Kafka</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Digital Twin</span>
+      </div>
+    </div>
+    <div class="arch-meta">
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Company</span><span class="meta-v">Smart TechOne · FDHL</span></div>
+        <div class="meta-item"><span class="meta-k">Role</span><span class="meta-v">Solo Architect</span></div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Since</span><span class="meta-v">April 2024</span></div>
+        <div class="meta-item"><span class="meta-k">Status</span><span class="meta-v live">● Active · Scaling</span></div>
+      </div>
+      <div class="meta-row">
+        <div class="meta-item"><span class="meta-k">Sites</span><span class="meta-v">5 Residential · 2 Industrial</span></div>
+        <div class="meta-item"><span class="meta-k">Scale</span><span class="meta-v">500+ Devices · 2K+ msg/day</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Isometric stack -->
+  <div class="iso-wrap">
+    <svg id="iso-svg" viewBox="0 0 1060 560" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="impact-row">
+    <div class="impact-card">
+      <p class="ic-label">The Challenge</p>
+      <p class="ic-text">Vendor-siloed dashboards, no unified view, no path to a digital twin. Handed a problem with <strong>no existing architecture</strong> and no engineering team.</p>
+    </div>
+    <div class="impact-card">
+      <p class="ic-label">The Build</p>
+      <p class="ic-text">Solo-designed <strong>Go ingestion services</strong> normalizing multi-protocol, multi-vendor payloads into clean JSON on AWS — serving structured data to the full downstream stack.</p>
+    </div>
+    <div class="impact-card">
+      <p class="ic-label">The Outcome</p>
+      <p class="ic-text">All vendor dashboards replaced. <strong>Digital twin enabled.</strong> New vendors and zones actively onboarding. Alerting, analytics and 3D city model in active development.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stack -->
+<section id="stack">
+  <div class="section-chrome">
+    <span class="sc-tag">[ Technical Stack / 02 ]</span>
+    <span class="sc-bin" id="sc-bin-02"></span>
+  </div>
+  <div class="s-num" aria-hidden>[02]</div>
+  <p class="s-tag" style="padding-top:2rem">// Technical Arsenal</p>
+  <h2 class="s-title">WHAT I<br>BUILD WITH</h2>
+  <div class="stack-grid">
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Go</span><span class="si-cat">Backend</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Python</span><span class="si-cat">Scripting</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">PostgreSQL</span><span class="si-cat">Database</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Apache Kafka</span><span class="si-cat">Streaming</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">MQTT</span><span class="si-cat">Protocol</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">LoRaWAN</span><span class="si-cat">Protocol</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Modbus</span><span class="si-cat">RTU / TCP</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">AWS</span><span class="si-cat">Cloud</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">WireGuard</span><span class="si-cat">VPN / Net</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Docker</span><span class="si-cat">Deploy</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Laravel</span><span class="si-cat">Web</span></div>
+    <div class="stack-item"><span class="si-ico">⬡</span><span class="si-name">Linux</span><span class="si-cat">Systems</span></div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="section-chrome">
+    <span class="sc-tag">[ Capabilities / 03 ]</span>
+    <span class="sc-bin" id="sc-bin-03"></span>
+  </div>
+  <div class="s-num" aria-hidden>[03]</div>
+  <p class="s-tag" style="padding-top:2rem">// Engineering Capabilities</p>
+  <h2 class="s-title">WHAT I CAN<br>DO FOR YOU</h2>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <span class="svc-num">01</span>
+      <h3 class="svc-title">IoT Pipeline Architecture</h3>
+      <p class="svc-desc">Design and build multi-vendor IoT data ingestion from scratch. MQTT, LoRaWAN, Modbus — protocol normalization and cloud forwarding at production scale.</p>
+      <div class="tag-row"><span class="tag hi">MQTT</span><span class="tag hi">LoRaWAN</span><span class="tag hi">Modbus</span><span class="tag">Device Integration</span></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">02</span>
+      <h3 class="svc-title">Go Backend Engineering</h3>
+      <p class="svc-desc">Production-grade REST APIs, microservices, and data services in Go. High-throughput, well-structured, built for reliability with minimal operational overhead.</p>
+      <div class="tag-row"><span class="tag hi">Go</span><span class="tag">REST APIs</span><span class="tag">Microservices</span><span class="tag">PostgreSQL</span></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">03</span>
+      <h3 class="svc-title">Data Pipeline Engineering</h3>
+      <p class="svc-desc">ETL pipelines, Kafka event streaming, and cloud-hosted data infrastructure on AWS. From raw telemetry to clean, queryable, analytics-ready storage.</p>
+      <div class="tag-row"><span class="tag hi">Kafka</span><span class="tag hi">AWS</span><span class="tag">ETL</span><span class="tag">PostgreSQL</span></div>
+    </div>
+    <div class="svc-card">
+      <span class="svc-num">04</span>
+      <h3 class="svc-title">Cloud & Network Infrastructure</h3>
+      <p class="svc-desc">AWS deployment, WireGuard VPN mesh, PostgreSQL schema design, and production operations for distributed, multi-site IoT environments.</p>
+      <div class="tag-row"><span class="tag hi">AWS</span><span class="tag">WireGuard</span><span class="tag">Networking</span><span class="tag">Linux</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Availability Strip -->
+<div class="avail-strip">
+  <span class="avail-dot"></span>
+  <span class="avail-text">Currently seeking on-site &amp; hybrid roles &nbsp;·&nbsp; Open to relocation &nbsp;·&nbsp; Remote engagements considered</span>
+</div>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-chrome">
+    <span class="sc-tag">[ Contact / 04 ]</span>
+  </div>
+  <div class="s-num" aria-hidden>[04]</div>
+  <div class="contact-inner" style="padding-top:2rem">
+    <p class="s-tag" style="text-align:center">// Let's Work Together</p>
+    <h2 class="s-title" style="text-align:center;font-size:clamp(2.5rem,6vw,6rem)">GET IN<br>TOUCH</h2>
+    <p class="contact-desc">I'm actively seeking on-site and hybrid engineering roles in Europe — Germany, Austria, the Netherlands, and Scandinavia are top priorities. Open to remote engagements as well for the right opportunity.</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a href="mailto:informdanial@gmail.com" class="btn btn-p">Send a Message</a>
+      <a href="https://linkedin.com/in/danial-younas-the1975" class="btn btn-g" target="_blank">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/danial-1975" class="btn btn-g" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Danial Younas</span>
+  <div class="foot-dot"></div>
+  <span>Systems & Data Engineer · Islamabad, Pakistan</span>
+</footer>
+
+<script>
+// ── BINARY TICKER ──
+(function(){
+  const bin='01000100 01000001 01001110 01001001 01000001 01001100 00100000 01011001 01001111 01010101 01001110 01000001 01010011 00100000 00101111 00101111 00100000 01010011 01011001 01010011 01010100 01000101 01001101 01010011 00100000 00100110 00100000 01000100 01000001 01010100 01000001 00100000 01000101 01001110 01000111 01001001 01001110 01000101 01000101 01010010 00100000 00101111 00101111 00100000 01001001 01010011 01001100 01000001 01001101 01000001 01000010 01000001 01000100 00100000 00101111 00101111 00100000 01010000 01001011';
+  const ticker=document.getElementById('ticker');
+  const content=bin+' '.repeat(20)+bin+' '.repeat(20)+bin;
+  ticker.innerHTML=`<span class="ticker-text">${content}</span><span class="ticker-text">${content}</span>`;
+  ['sc-bin-01','sc-bin-02','sc-bin-03'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=bin.substring(0,96)+'...';
+  });
+})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>60);
+});
+
+// ── BUILD ISOMETRIC STACK ──
+(function buildIso(){
+  const svg=document.getElementById('iso-svg');
+  const NS='http://www.w3.org/2000/svg';
+  function el(tag,attr,parent){
+    const e=document.createElementNS(NS,tag);
+    for(const[k,v]of Object.entries(attr)) e.setAttribute(k,v);
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(s,attr,parent){const e=el('text',attr,parent);e.textContent=s;return e}
+
+  // ── GEOMETRY: taller layers, more spacing ──
+  const SK=50, W=300, H=110, DX=110, DY=130;
+  svg.setAttribute('viewBox','0 0 1060 780');
+
+  function pts(i){
+    const x=20+i*DX, y=30+i*DY;
+    return{
+      poly:`${x+SK},${y} ${x+SK+W},${y} ${x+W},${y+H} ${x},${y+H}`,
+      TL:[x+SK,y], TR:[x+SK+W,y], BR:[x+W,y+H], BL:[x,y+H],
+      cx:x+SK+W/2, cy:y+H/2, x, y
+    };
+  }
+
+  const LAYERS=[
+    {name:'01',label:'FIELD DEVICES',sub:'500+ UNITS · 7 SITES · MULTI-VENDOR',type:'devices'},
+    {name:'02',label:'PROTOCOL GATEWAYS',sub:'MQTT · LoRaWAN · Modbus RTU/TCP',type:'gateway'},
+    {name:'03',label:'GO INGESTION SERVICE',sub:'AWS EC2 · DECODE · NORMALIZE · FORWARD',type:'ingest'},
+    {name:'04',label:'KAFKA · POSTGRESQL',sub:'EVENT STREAMS · DATA LAKE · STORAGE',type:'process'},
+    {name:'05',label:'CITY DASHBOARD',sub:'MONITORING · CONTROL · DIGITAL TWIN',type:'dashboard'},
+  ];
+
+  const defs=el('defs',{},svg);
+
+  // Filter: subtle glow
+  const fglow=el('filter',{id:'glow',x:'-20%',y:'-20%',width:'140%',height:'140%'},defs);
+  el('feGaussianBlur',{stdDeviation:'3',result:'blur'},fglow);
+  const feMerge=el('feMerge',{},fglow);
+  el('feMergeNode',{in:'blur'},feMerge);
+  el('feMergeNode',{in:'SourceGraphic'},feMerge);
+
+  // Filter: layer shadow
+  const fshadow=el('filter',{id:'lshadow',x:'-5%',y:'-5%',width:'115%',height:'130%'},defs);
+  el('feDropShadow',{dx:'0',dy:'6',stdDeviation:'6','flood-color':'rgba(0,0,0,0.7)','flood-opacity':'1'},fshadow);
+
+  // Clip paths
+  for(let i=0;i<5;i++){
+    const p=pts(i),cp=el('clipPath',{id:`cp${i}`},defs);
+    el('polygon',{points:p.poly},cp);
+  }
+
+  // Updated connection paths and spine for DY=130, H=110
+  const p0=pts(0),p1=pts(1),p2=pts(2),p3=pts(3),p4=pts(4);
+  const spineD=`M ${p0.BL[0]} ${p0.BL[1]} C ${p1.BL[0]-35} ${p0.BL[1]+20} ${p1.BL[0]-15} ${p1.BL[1]-20} ${p1.BL[0]} ${p1.BL[1]} C ${p2.BL[0]-35} ${p1.BL[1]+20} ${p2.BL[0]-15} ${p2.BL[1]-20} ${p2.BL[0]} ${p2.BL[1]} C ${p3.BL[0]-35} ${p2.BL[1]+20} ${p3.BL[0]-15} ${p3.BL[1]-20} ${p3.BL[0]} ${p3.BL[1]} C ${p4.BL[0]-35} ${p3.BL[1]+20} ${p4.BL[0]-15} ${p4.BL[1]-20} ${p4.BL[0]} ${p4.BL[1]}`;
+  el('path',{id:'spinePath',d:spineD,fill:'none'},defs);
+
+  const connPaths=[
+    `M ${p0.BL[0]} ${p0.BL[1]} C ${p1.BL[0]-35} ${p0.BL[1]+20} ${p1.BL[0]-15} ${p1.BL[1]-20} ${p1.BL[0]} ${p1.BL[1]}`,
+    `M ${p1.BL[0]} ${p1.BL[1]} C ${p2.BL[0]-35} ${p1.BL[1]+20} ${p2.BL[0]-15} ${p2.BL[1]-20} ${p2.BL[0]} ${p2.BL[1]}`,
+    `M ${p2.BL[0]} ${p2.BL[1]} C ${p3.BL[0]-35} ${p2.BL[1]+20} ${p3.BL[0]-15} ${p3.BL[1]-20} ${p3.BL[0]} ${p3.BL[1]}`,
+    `M ${p3.BL[0]} ${p3.BL[1]} C ${p4.BL[0]-35} ${p3.BL[1]+20} ${p4.BL[0]-15} ${p4.BL[1]-20} ${p4.BL[0]} ${p4.BL[1]}`,
+  ];
+  connPaths.forEach((d,i)=>el('path',{id:`conn${i}`,d,fill:'none'},defs));
+
+  // Traversal paths
+  for(let i=0;i<5;i++){
+    const p=pts(i);
+    el('path',{id:`trav${i}`,d:`M ${p.TL[0]+20} ${p.TL[1]+H/2} L ${p.TR[0]-20} ${p.TL[1]+H/2}`,fill:'none'},defs);
+  }
+
+  // ── DEVICE ICONS (symbols defined once, used via <use>) ──
+  function defIcon(id,pathData){
+    const g=el('g',{id:`icon-${id}`},defs);
+    const p=document.createElementNS(NS,'path');
+    p.setAttribute('d',pathData);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','currentColor');
+    p.setAttribute('stroke-width','1.3');
+    p.setAttribute('stroke-linecap','round');
+    p.setAttribute('stroke-linejoin','round');
+    g.appendChild(p);
+  }
+  defIcon('electric','M10 2L4 12h6l-2 10L18 9h-6z');
+  defIcon('water','M10 2C10 2 3 10 3 14a7 7 0 0014 0C17 10 10 2 10 2z');
+  defIcon('gas','M10 16C5 16 4 11 7 9c0 3 2 3 2 3 0-3 2-6 2-8 4 3 6 8 3 12-1-3-3-3-4-2z');
+  defIcon('bin','M5 7h10M7 7V5h6v2M6 7l1 12h6L14 7M9 10v5M11 10v5');
+  defIcon('weather','M10 10m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M10 3v2M10 15v2M3 10h2M15 10h2M5 5l1.5 1.5M13.5 13.5l1.5 1.5M5 15l1.5-1.5M13.5 6.5l1.5-1.5');
+  defIcon('quality','M4 13Q7 9 10 13Q13 17 16 13M4 8Q7 4 10 8Q13 12 16 8');
+
+  // ── RENDER LAYERS ──
+  const layerGroup=el('g',{id:'layers-wrap'},svg);
+  const labelGroup=el('g',{id:'labels-wrap'},svg);
+
+  LAYERS.forEach((layer,i)=>{
+    const p=pts(i);
+
+    // Layer group (for reveal animation)
+    const lg=el('g',{'class':'iso-layer'},layerGroup);
+    el('title',{},lg).textContent=layer.label;
+
+    // Left side face (3D depth illusion)
+    el('polygon',{
+      points:`${p.TL[0]},${p.TL[1]} ${p.BL[0]},${p.BL[1]} ${p.BL[0]},${p.BL[1]+8} ${p.TL[0]},${p.TL[1]+8}`,
+      fill:'rgba(255,255,255,0.018)',stroke:'rgba(255,255,255,0.08)','stroke-width':'0.8'
+    },lg);
+
+    // Bottom edge face
+    el('polygon',{
+      points:`${p.BL[0]},${p.BL[1]} ${p.BR[0]},${p.BR[1]} ${p.BR[0]},${p.BR[1]+8} ${p.BL[0]},${p.BL[1]+8}`,
+      fill:'rgba(255,255,255,0.012)',stroke:'rgba(255,255,255,0.05)','stroke-width':'0.8'
+    },lg);
+
+    // Main face background
+    el('polygon',{
+      points:p.poly,
+      fill:'rgba(255,255,255,0.025)',stroke:'rgba(255,255,255,0.14)','stroke-width':'1',
+      filter:'url(#lshadow)'
+    },lg);
+
+    // Grid overlay (clipped to face)
+    const gridGroup=el('g',{'clip-path':`url(#cp${i})`},lg);
+    // Horizontal grid lines
+    for(let v=0.25;v<1;v+=0.25){
+      const lx1=p.TL[0]-v*SK,lx2=p.TR[0]-v*SK,ly=p.TL[1]+v*H;
+      el('line',{x1:lx1,y1:ly,x2:lx2,y2:ly,stroke:'rgba(255,255,255,0.06)','stroke-width':'0.5'},gridGroup);
+    }
+    // Vertical-ish grid lines (following face angle)
+    for(let u=0.2;u<1;u+=0.2){
+      el('line',{
+        x1:p.TL[0]+u*W,y1:p.TL[1],
+        x2:p.BL[0]+u*W,y2:p.BL[1],
+        stroke:'rgba(255,255,255,0.04)','stroke-width':'0.5'
+      },gridGroup);
+    }
+
+    // ── LAYER CONTENT (clipped) ──
+    const content=el('g',{'clip-path':`url(#cp${i})`},lg);
+
+    if(layer.type==='devices'){
+      // 6 device icons in 2 rows — v positions chosen so labels stay within H=110
+      const devs=[
+        {id:'electric',name:'ELECTRIC',col:0,row:0},
+        {id:'water',   name:'WATER',   col:1,row:0},
+        {id:'gas',     name:'GAS',     col:2,row:0},
+        {id:'bin',     name:'WASTE',   col:0,row:1},
+        {id:'weather', name:'WEATHER', col:1,row:1},
+        {id:'quality', name:'H2O',     col:2,row:1},
+      ];
+      const rowV=[0.24, 0.66]; // v=0.24 → cy at 26% of H; v=0.66 → cy at 73% of H (label at ~83%, safe)
+      const colU=[0.18, 0.50, 0.82];
+      devs.forEach(d=>{
+        const v=rowV[d.row], u=colU[d.col];
+        const cx=p.TL[0]+u*W-v*SK;
+        const cy=p.TL[1]+v*H;
+        // Icon 16x16 centered on cx,cy
+        const g=el('g',{transform:`translate(${cx-8},${cy-10})`},content);
+        const use=document.createElementNS(NS,'use');
+        use.setAttributeNS('http://www.w3.org/1999/xlink','href',`#icon-${d.id}`);
+        use.setAttribute('width','16'); use.setAttribute('height','16');
+        use.setAttribute('stroke','rgba(255,255,255,0.65)');
+        g.appendChild(use);
+        // Label 4px below the icon bottom (y=16+4=20 within group)
+        txt(d.name,{x:8,y:24,'text-anchor':'middle',
+          fill:'rgba(255,255,255,0.3)',
+          'font-family':'JetBrains Mono,monospace','font-size':'5.5','letter-spacing':'0.5'},g);
+      });
+    }
+
+    if(layer.type==='gateway'){
+      const protos=[
+        {name:'MQTT',sub:'PUB/SUB',u:0.18},{name:'LoRaWAN',sub:'RF/RADIO',u:0.50},{name:'MODBUS',sub:'RTU/TCP',u:0.82}
+      ];
+      protos.forEach(pr=>{
+        const cx=p.TL[0]+pr.u*W-0.5*SK;
+        const cy=p.TL[1]+0.5*H;
+        const bw=68,bh=62;
+        el('rect',{x:cx-bw/2,y:cy-bh/2,width:bw,height:bh,rx:'2',fill:'rgba(255,255,255,0.04)',stroke:'rgba(255,255,255,0.18)','stroke-width':'0.8'},content);
+        txt(pr.name,{x:cx,y:cy-4,'text-anchor':'middle',fill:'rgba(255,255,255,0.82)','font-family':'JetBrains Mono,monospace','font-size':'9','font-weight':'500','letter-spacing':'1'},content);
+        txt(pr.sub,{x:cx,y:cy+13,'text-anchor':'middle',fill:'rgba(255,255,255,0.35)','font-family':'JetBrains Mono,monospace','font-size':'7.5'},content);
+      });
+    }
+
+    if(layer.type==='ingest'){
+      const steps=['SUBSCRIBE','DECODE','NORMALIZE','FORWARD'];
+      const bw=62,bh=50,gap=11;
+      const totalW=steps.length*bw+(steps.length-1)*gap;
+      const startX=(p.TL[0]+p.BR[0])/2-totalW/2;
+      const cy=p.TL[1]+H/2;
+      steps.forEach((s,si)=>{
+        const bx=startX+si*(bw+gap);
+        el('rect',{x:bx,y:cy-bh/2,width:bw,height:bh,rx:'2',fill:'rgba(255,255,255,0.04)',stroke:'rgba(255,255,255,0.15)','stroke-width':'0.8'},content);
+        txt(s,{x:bx+bw/2,y:cy+4,'text-anchor':'middle',fill:'rgba(255,255,255,0.78)','font-family':'JetBrains Mono,monospace','font-size':'7.5','letter-spacing':'0.4'},content);
+        if(si<steps.length-1){
+          el('line',{x1:bx+bw+1,y1:cy,x2:bx+bw+gap-1,y2:cy,stroke:'rgba(255,255,255,0.28)','stroke-width':'0.8'},content);
+          el('path',{d:`M${bx+bw+gap-3},${cy-3.5} L${bx+bw+gap+1},${cy} L${bx+bw+gap-3},${cy+3.5}`,fill:'rgba(255,255,255,0.28)'},content);
+        }
+      });
+      el('rect',{x:p.TL[0]+8,y:p.TL[1]+7,width:24,height:14,rx:'1',fill:'rgba(255,255,255,0.07)',stroke:'rgba(255,255,255,0.22)','stroke-width':'0.7'},content);
+      txt('Go',{x:p.TL[0]+20,y:p.TL[1]+17,'text-anchor':'middle',fill:'rgba(255,255,255,0.72)','font-family':'JetBrains Mono,monospace','font-size':'8','font-weight':'600'},content);
+    }
+
+    if(layer.type==='process'){
+      const cx=(p.TL[0]+p.BR[0])/2, cy=p.TL[1]+H/2;
+      [0.32,0.58,0.44,0.75,0.52].forEach((h,bi)=>{
+        const bx=cx-108+bi*19, bh2=Math.round(h*44), by=cy-bh2/2;
+        el('rect',{x:bx,y:by,width:12,height:bh2,rx:'1',fill:`rgba(255,255,255,${0.07+h*0.14})`},content);
+      });
+      txt('KAFKA',{x:cx-84,y:cy+30,'text-anchor':'middle',fill:'rgba(255,255,255,0.28)','font-family':'JetBrains Mono,monospace','font-size':'6.5','letter-spacing':'1.2'},content);
+      el('line',{x1:cx-28,y1:cy,x2:cx-8,y2:cy,stroke:'rgba(255,255,255,0.22)','stroke-width':'0.8'},content);
+      el('path',{d:`M${cx-10},${cy-3.5} L${cx-5},${cy} L${cx-10},${cy+3.5}`,fill:'rgba(255,255,255,0.22)'},content);
+      const dbx=cx, dby=cy-30, dbw=70, dbh=56, dr=8;
+      el('rect',{x:dbx,y:dby+dr,width:dbw,height:dbh-2*dr,fill:'rgba(255,255,255,0.04)',stroke:'rgba(255,255,255,0.16)','stroke-width':'0.8'},content);
+      el('ellipse',{cx:dbx+dbw/2,cy:dby+dr,rx:dbw/2,ry:dr,fill:'rgba(255,255,255,0.06)',stroke:'rgba(255,255,255,0.22)','stroke-width':'0.8'},content);
+      el('ellipse',{cx:dbx+dbw/2,cy:dby+dbh-dr,rx:dbw/2,ry:dr,fill:'rgba(255,255,255,0.04)',stroke:'rgba(255,255,255,0.1)','stroke-width':'0.8'},content);
+      txt('POSTGRESQL',{x:dbx+dbw/2,y:dby+dbh/2+3,'text-anchor':'middle',fill:'rgba(255,255,255,0.4)','font-family':'JetBrains Mono,monospace','font-size':'6.2'},content);
+    }
+
+    if(layer.type==='dashboard'){
+      const cx=(p.TL[0]+p.BR[0])/2, cy=p.TL[1]+H/2;
+      const mw=136, mh=74, mx=cx-mw/2, my=cy-mh/2;
+      el('rect',{x:mx,y:my,width:mw,height:mh,rx:'3',fill:'rgba(255,255,255,0.03)',stroke:'rgba(255,255,255,0.2)','stroke-width':'1'},content);
+      el('rect',{x:mx,y:my,width:mw,height:15,rx:'3',fill:'rgba(255,255,255,0.04)'},content);
+      ['rgba(191,43,31,0.85)','rgba(255,200,50,0.7)','rgba(28,158,78,0.85)'].forEach((col,d)=>{
+        el('circle',{cx:mx+8+d*10,cy:my+7.5,r:'2.8',fill:col},content);
+      });
+      txt('● LIVE',{x:mx+mw-6,y:my+9.5,'text-anchor':'end',fill:'rgba(28,158,78,0.85)','font-family':'JetBrains Mono,monospace','font-size':'5.5','font-weight':'500'},content);
+      [0.35,0.65,0.5,0.88,0.6,0.78,0.45,0.92].forEach((h,bi)=>{
+        const bx=mx+5+bi*14.5, bh2=Math.round(h*38), by=my+15+38-bh2;
+        el('rect',{x:bx,y:by,width:9,height:bh2,rx:'1',fill:`rgba(255,255,255,${0.06+h*0.18})`},content);
+      });
+      txt('∿ 3D CITY MODEL — IN DEVELOPMENT',{x:cx,y:my+mh+14,'text-anchor':'middle',fill:'rgba(255,255,255,0.2)','font-family':'JetBrains Mono,monospace','font-size':'5.5','letter-spacing':'0.8'},content);
+    }
+
+    // ── RIGHT LABEL ──
+    const llg=el('g',{'class':'iso-label'},labelGroup);
+    const lx=p.TR[0]+22,ly=p.TL[1]+H/2;
+    // Connector line from layer edge to label
+    el('line',{x1:p.TR[0]+1,y1:ly,x2:p.TR[0]+18,y2:ly,stroke:'rgba(255,255,255,0.2)','stroke-width':'0.8'},llg);
+    el('circle',{cx:p.TR[0]+1,cy:ly,r:'2',fill:'rgba(255,255,255,0.25)'},llg);
+    txt(`LAYER ${layer.name}`,{x:lx,y:ly-12,fill:'rgba(255,255,255,0.25)','font-family':'JetBrains Mono,monospace','font-size':'6.5','letter-spacing':'2'},llg);
+    txt(layer.label,{x:lx,y:ly+1,fill:'rgba(255,255,255,0.85)','font-family':'JetBrains Mono,monospace','font-size':'8.5','letter-spacing':'1','font-weight':'500'},llg);
+    txt(layer.sub,{x:lx,y:ly+14,fill:'rgba(255,255,255,0.3)','font-family':'JetBrains Mono,monospace','font-size':'6.5','letter-spacing':'0.8'},llg);
+  });
+
+  // ── SPINE (drawn on top of layers) ──
+  const spineGroup=el('g',{},svg);
+  el('path',{d:spineD,fill:'none',stroke:'rgba(255,255,255,0.06)','stroke-width':'2'},spineGroup);
+  el('path',{d:spineD,fill:'none',stroke:'rgba(255,255,255,0.28)','stroke-width':'1.5',
+    'class':'iso-spine','stroke-linecap':'round'},spineGroup);
+
+  // Junction dots at each layer's BL corner
+  [p0,p1,p2,p3,p4].forEach(p=>{
+    el('circle',{cx:p.BL[0],cy:p.BL[1],r:'3.2',fill:'rgba(255,255,255,0.16)',stroke:'rgba(255,255,255,0.3)','stroke-width':'1'},spineGroup);
+  });
+
+  // ── ANIMATED DATA PARTICLES ──
+  const animGroup=el('g',{},svg);
+
+  // Along full spine
+  for(let i=0;i<5;i++){
+    const c=el('circle',{r:'2.5',fill:'white',opacity:'0'},animGroup);
+    const am=document.createElementNS(NS,'animateMotion');
+    am.setAttribute('dur',`${3.8+i*0.45}s`); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',`${i*0.9}s`);
+    const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href','#spinePath');
+    am.appendChild(mp); c.appendChild(am);
+    const ao=document.createElementNS(NS,'animate');
+    ao.setAttribute('attributeName','opacity'); ao.setAttribute('values','0;0.9;0.9;0');
+    ao.setAttribute('keyTimes','0;0.08;0.88;1'); ao.setAttribute('dur',`${3.8+i*0.45}s`);
+    ao.setAttribute('repeatCount','indefinite'); ao.setAttribute('begin',`${i*0.9}s`);
+    c.appendChild(ao);
+  }
+
+  // Between layers
+  connPaths.forEach((d,ci)=>{
+    for(let j=0;j<3;j++){
+      const c=el('circle',{r:'2',fill:'rgba(255,255,255,0.9)',opacity:'0'},animGroup);
+      const am=document.createElementNS(NS,'animateMotion');
+      am.setAttribute('dur','1.9s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',`${ci*0.35+j*0.75}s`);
+      const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href',`#conn${ci}`);
+      am.appendChild(mp); c.appendChild(am);
+      const ao=document.createElementNS(NS,'animate');
+      ao.setAttribute('attributeName','opacity'); ao.setAttribute('values','0;0.8;0');
+      ao.setAttribute('dur','1.9s'); ao.setAttribute('repeatCount','indefinite'); ao.setAttribute('begin',`${ci*0.35+j*0.75}s`);
+      c.appendChild(ao);
+    }
+  });
+
+  // Layer traversal
+  for(let i=0;i<5;i++){
+    for(let j=0;j<2;j++){
+      const c=el('circle',{r:'1.8',fill:'rgba(255,255,255,0.5)',opacity:'0'},animGroup);
+      const am=document.createElementNS(NS,'animateMotion');
+      am.setAttribute('dur','2.4s'); am.setAttribute('repeatCount','indefinite'); am.setAttribute('begin',`${i*0.18+j*1.2}s`);
+      const mp=document.createElementNS(NS,'mpath'); mp.setAttributeNS('http://www.w3.org/1999/xlink','href',`#trav${i}`);
+      am.appendChild(mp); c.appendChild(am);
+      const ao=document.createElementNS(NS,'animate');
+      ao.setAttribute('attributeName','opacity'); ao.setAttribute('values','0;0.6;0');
+      ao.setAttribute('dur','2.4s'); ao.setAttribute('repeatCount','indefinite'); ao.setAttribute('begin',`${i*0.18+j*1.2}s`);
+      c.appendChild(ao);
+    }
+  }
+
+  // ── SCROLL REVEAL ──
+  const archSection=document.getElementById('arch');
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        archSection.classList.add('revealed');
+        observer.disconnect();
+      }
+    });
+  },{threshold:0.12});
+  observer.observe(archSection);
+
+})(); // end buildIso
+</script>
+</body>
+</html>
